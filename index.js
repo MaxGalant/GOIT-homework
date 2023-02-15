@@ -4,46 +4,60 @@ const contacts = require("./contacts");
 async function  invokeAction({ action, id, name, email, phone }) {
     switch  (action) {
         case "list":
-            const contactsList = await contacts.listContacts()
+            try {
+                const contactsList = await contacts.listContacts()
 
-            console.log('List of contacts:',contactsList)
-
+                console.log('List of contacts:', contactsList)
+            }catch (err){
+                console.error(err)
+            }
             break;
 
         case "get":
-            const contactById = await contacts.getContactById(`${id}`)
+            try {
 
-            if (!contactById){
-                console.log(`Contact with id:${id} doesn't exist`)
+                const contactById = await contacts.getContactById(`${id}`)
 
-                break;
+                if (!contactById) {
+                    console.log(`Contact with id:${id} doesn't exist`)
+
+                    break;
+                }
+
+                console.log(`The contact with id: ${id}`, contactById)
+            }catch (err){
+                console.error(err)
             }
-
-            console.log(`The contact with id: ${id}`,contactById)
-
             break;
 
         case "add":
-            const {newContact,contactsList:listWithNewContact} = await contacts.addContact(name,email,phone)
+            try {
+                const {newContact, contactsList: listWithNewContact} = await contacts.addContact(name, email, phone)
 
-            console.log(`New contact:`,newContact)
+                console.log(`New contact:`, newContact)
 
-            console.log(`List with a new contact with id:${newContact.id}`,listWithNewContact)
-
+                console.log(`List with a new contact with id:${newContact.id}`, listWithNewContact)
+            }catch (err){
+                console.error(err)
+            }
             break;
 
         case "remove":
-            const { removedContact,contactsList: listWithoutContact} = await contacts.removeContact(`${id}`)
+            try {
+                const {removedContact, contactsList: listWithoutContact} = await contacts.removeContact(`${id}`)
 
-            if (!removedContact){
-                console.log(`Contact with id:${id} doesn't exist`)
+                if (!removedContact) {
+                    console.log(`Contact with id:${id} doesn't exist`)
 
-                break;
+                    break;
+                }
+
+                console.log(`Removed contact:`, removedContact)
+
+                console.log(`List without contact with id:${id}`, listWithoutContact)
+            }catch (err){
+                console.log(err)
             }
-
-            console.log(`Removed contact:`,removedContact)
-
-            console.log(`List without contact with id:${id}`,listWithoutContact)
             break;
 
         default:
